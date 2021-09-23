@@ -2,7 +2,7 @@
 
 --b
 ALTER TABLE WideWorldImportersDW.Dimension.[Stock Item]
-ADD [Country of Manufacture] NVARCHAR(20);
+ADD [Country of Manufacture] NVARCHAR(20)
 
 
 --ALTER TABLE WideWorldImportersDW.Dimension.[Stock Item]
@@ -11,9 +11,9 @@ ADD [Country of Manufacture] NVARCHAR(20);
 UPDATE WideWorldImportersDW.Dimension.[Stock Item]
 SET [Country of Manufacture] = JSON_VALUE(SI.CustomFields,'$.CountryOfManufacture')
 FROM WideWorldImporters.Warehouse.StockItems AS SI
-WHERE [Stock Item Key] = SI.StockItemID;
+WHERE [Stock Item Key] = SI.StockItemID
 
-SELECT [Country of Manufacture] FROM WideWorldImportersDW.Dimension.[Stock Item];
+SELECT [Country of Manufacture] FROM WideWorldImportersDW.Dimension.[Stock Item]
 
 --c.
 -----------------------------------------Extract-----------------------------------------------
@@ -23,7 +23,7 @@ SELECT [Country of Manufacture] FROM WideWorldImportersDW.Dimension.[Stock Item]
 --GO
 
 CREATE PROCEDURE dbo.ExtractOrder
-AS BEGIN
+AS
 	SELECT 
 	C.DeliveryCityID,
 	O.CustomerID,
@@ -53,13 +53,13 @@ AS BEGIN
 	ON PT.PackageTypeID = OL.PackageTypeID
 	JOIN WideWorldImporters.Sales.Customers AS C
 	ON C.CustomerID = O.CustomerID 
-END
+
 GO
 
---DROP TABLE #TEMP;
+--DROP TABLE WideWorldImportersDW.Integration.ExtractOrder_Staging;
 --GO
 
-CREATE TABLE #TEMP(
+CREATE TABLE WideWorldImportersDW.Integration.ExtractOrder_Staging(
 	DeliveryCityID INT,
 	CustomerID INT,
 	StockItemID INT ,
@@ -77,7 +77,7 @@ CREATE TABLE #TEMP(
 	TaxAmount DECIMAL(18,2)
 );  
 
-INSERT INTO #TEMP       
+INSERT INTO WideWorldImportersDW.Integration.ExtractOrder_Staging      
     EXEC dbo.ExtractOrder ;
 
 
@@ -107,13 +107,13 @@ AS
 	 Quantity*UnitPrice  AS [Total Excluding Tax],
 	 TaxAmount,
 	 Quantity*UnitPrice + TaxAmount AS [Total Including Tax]
-	 FROM #TEMP
+	 FROM WideWorldImportersDW.Integration.ExtractOrder_Staging  
 
 GO
 
---DROP TABLE #TEMP2;
+--DROP TABLE WideWorldImportersDW.Integration.TransformOrder_Staging;
 
-CREATE TABLE #TEMP2(
+CREATE TABLE WideWorldImportersDW.Integration.TransformOrder_Staging(
 	DeliveryCityID INT,
 	CustomerID INT,
 	StockItemID INT ,
@@ -133,13 +133,14 @@ CREATE TABLE #TEMP2(
 	[Total Including Tax] DECIMAL(18,3)
 );  
 
-INSERT INTO #TEMP2       
+INSERT INTO  WideWorldImportersDW.Integration.TransformOrder_Staging   
 	EXEC dbo.TrasformOrder;
 
+DROP TABLE WideWorldImportersDW.Integration.ExtractOrder_Staging;
 --------------------------------------------LOAD--------------------------------------------------
 
 
-DROP PROCEDURE dbo.LoadOrder;
+--DROP PROCEDURE dbo.LoadOrder;
 
 CREATE PROCEDURE dbo.LoadOrder
 AS
@@ -182,7 +183,7 @@ AS
 	 TaxAmount AS [Tax Amount],
 	 [Total Including Tax],
 	 9
-	FROM #TEMP2 AS A
+	FROM WideWorldImportersDW.Integration.TransformOrder_Staging    AS A
 	LEFT JOIN WideWorldImportersDW.Dimension.Customer AS C
 	ON A.CustomerID = C.[WWI Customer ID] AND C.[Valid To]='9999-12-31 23:59:59.9999999'
 	LEFT JOIN WideWorldImportersDW.Dimension.[Stock Item] AS SI
@@ -193,6 +194,7 @@ AS
 	ON EE.[WWI Employee ID] = A.PickedByPersonID AND EE.[Valid To] = '9999-12-31 23:59:59.9999999'
 	LEFT JOIN WideWorldImportersDW.Dimension.City AS City
 	ON City.[WWI City ID] = A.DeliveryCityID AND City.[Valid To] = '9999-12-31 23:59:59.9999999'
-	
-	
+
+
 EXEC dbo.LoadOrder
+DROP TABLE WideWorldImportersDW.Integration.TransformOrder_Staging;
