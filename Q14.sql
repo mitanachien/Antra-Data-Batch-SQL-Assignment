@@ -1,3 +1,6 @@
+-- Use ISNULL function to replace NULL value with 'No Sales'
+-- Use ROW_NUMBER() window function to find the most deliveries item in each city
+
 WITH cte AS (SELECT city.CityID, s.StockItemID, SUM(ol.PickedQuantity) AS Total
 FROM WideWorldImporters.Application.Cities city
 LEFT JOIN WideWorldImporters.Sales.Customers c
@@ -18,8 +21,7 @@ GROUP BY city.CityID, s.StockItemID
 )
 
 SELECT CityName, 
-CASE WHEN StockItemName IS NULL THEN 'No Sales'
-ELSE StockItemName END AS StockItemName FROM
+ISNULL(StockItemName, 'No Sales') AS StockItemName FROM
 (SELECT city.CityName, s.StockItemName, 
 ROW_NUMBER() OVER(PARTITION BY cte.CityID ORDER BY Total DESC) AS Ranking
 FROM cte

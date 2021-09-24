@@ -1,3 +1,6 @@
+-- Create a view
+-- Use PIVOT to rotate rows in Year column to separated columns
+
 CREATE VIEW QuantityByYears AS
 SELECT StockGroupName, [2013], [2014], [2015], [2016], [2017]
 FROM(
@@ -15,4 +18,4 @@ PIVOT
 (
 SUM(Quantity)
 FOR Year IN ([2013], [2014], [2015], [2016], [2017])
-) AS PivotTables;
+) AS PivotTable;

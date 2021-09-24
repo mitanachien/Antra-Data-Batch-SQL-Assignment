@@ -1,7 +1,9 @@
 USE WideWorldImporters;
+GO
 
-DROP PROCEDURE dbo.OrderInNextSevenDays;
+--DROP PROCEDURE dbo.OrderInNextSevenDays;
 
+-- Create Stored Procedure to delete and select data
 CREATE PROCEDURE dbo.OrderInNextSevenDays
 (@OrderDate AS date)
 AS BEGIN

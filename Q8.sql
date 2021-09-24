@@ -1,3 +1,5 @@
+-- Use DATEPART function to extract month
+
 SELECT DATEPART(MONTH, o.OrderDate) AS Month, s.StateProvinceName, AVG(DATEDIFF(DAY, o.OrderDate, i.ConfirmedDeliveryTime)) AS AvgDates FROM WideWorldImporters.Sales.Invoices i
 INNER JOIN WideWorldImporters.Sales.Orders o
 ON i.OrderID = o.OrderID

@@ -1,3 +1,4 @@
+-- Use GROUP BY to do aggregation
 SELECT StockItemName, COUNT(StockItemName) AS TotalQuantity FROM WideWorldImporters.Warehouse.StockItems s
 INNER JOIN WideWorldImporters.Purchasing.PurchaseOrderLines po
 ON s.StockItemID = po.StockItemID

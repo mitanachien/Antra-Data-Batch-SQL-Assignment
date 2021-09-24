@@ -45,6 +45,7 @@ SET @json = N'{
    ]
 }';
 
+-- Store the parsing result in another json file
 SET @jsonII = 
 (SELECT StockItemName, SupplierID, UnitPackageID, CONCAT(OuterPackageIDII, OuterPackageID) AS OuterPackageID,
 Brand, LeadTimeDays, QuantityPerOuter, TaxRate, UnitPrice, RecommendedRetailPrice, TypicalWeightPerUnit,

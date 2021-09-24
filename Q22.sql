@@ -1,7 +1,9 @@
 USE WideWorldImporters;
+GO
 
-DROP TABLE ods.StockItem;
+--DROP TABLE ods.StockItem;
 
+-- Use SELECT ... INTO to create a new table
 SELECT [StockItemID], 
 [StockItemName],
 [SupplierID],

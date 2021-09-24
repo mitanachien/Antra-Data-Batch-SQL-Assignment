@@ -1,6 +1,9 @@
 USE WideWorldImporters;
 GO
 
+--DROP TABLE ods.ConfirmedDeviveryJson;
+
+-- Create table
 CREATE TABLE ods.ConfirmedDeviveryJson
 (
 ID INT NOT NULL IDENTITY PRIMARY KEY,
@@ -8,10 +11,11 @@ Date date,
 Value NVARCHAR(MAX)
 );
 
+-- Add CHECK constraint to ensure the datatype is JSON
 ALTER TABLE ods.ConfirmedDeviveryJson
 ADD CONSTRAINT [Value record should be formatted as JSON] CHECK (ISJSON(Value)=1);
 
-DROP PROCEDURE dbo.InvoiceInfoCreate;
+--DROP PROCEDURE dbo.InvoiceInfoCreate;
 
 CREATE PROCEDURE dbo.InvoiceInfoCreate
 (@Date AS date) 
@@ -24,7 +28,6 @@ AS BEGIN
 		ON i.InvoiceID = il.InvoiceID
 		WHERE i.InvoiceDate = @Date
 		FOR JSON AUTO); 
-		SELECT @JsonFile;
 
 		BEGIN TRAN;
 		SAVE TRAN MySavePoint;

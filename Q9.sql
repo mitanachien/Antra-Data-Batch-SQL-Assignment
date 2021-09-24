@@ -1,3 +1,5 @@
+-- Use two ctes to help calculate the total sold in two scenarios
+
 WITH cte1 AS (SELECT s.StockItemName, SUM(pol.ReceivedOuters) AS TotalPurchased FROM WideWorldImporters.Warehouse.StockItems s
 INNER JOIN WideWorldImporters.Purchasing.PurchaseOrderLines pol
 ON s.StockItemID = pol.StockItemID

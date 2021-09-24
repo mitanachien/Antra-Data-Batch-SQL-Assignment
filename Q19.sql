@@ -1,3 +1,5 @@
+-- Create dynamic PIVOT queries to rotate rows in StockGroupName to separated columns
+
 DECLARE @GroupName NVARCHAR(MAX) = '', @sql NVARCHAR(MAX);
 SELECT @GroupName += QUOTENAME(StockGroupName) + ','
 FROM (SELECT StockGroupName

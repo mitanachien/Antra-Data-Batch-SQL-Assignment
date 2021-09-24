@@ -1,3 +1,7 @@
+-- Use pattern matching to find items which are mugs
+-- Use HAVING to filter aggregation results
+-- To avoid unnecessary GROUP BY, use CTE
+
 WITH cte AS 
 (SELECT CustomerName, SUM(ol.PickedQuantity) AS Total
 FROM WideWorldImporters.Sales.Customers c
@@ -16,5 +20,5 @@ SELECT a.CustomerName, c.PhoneNumber, p.FullName
 FROM cte AS a
 LEFT JOIN WideWorldImporters.Sales.Customers c
 ON a.CustomerName = c.CustomerName
-INNER JOIN WideWorldImporters.Application.People p
+LEFT JOIN WideWorldImporters.Application.People p
 ON c.PrimaryContactPersonID = p.PersonID;

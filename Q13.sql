@@ -1,3 +1,5 @@
+-- Use three CTEs to help query data in different scenarios
+
 WITH cte1 AS (SELECT sg.StockGroupName, SUM(pol.ReceivedOuters) AS TotalPurchased 
 FROM WideWorldImporters.Warehouse.StockGroups sg
 INNER JOIN WideWorldImporters.Warehouse.StockItemStockGroups sisg

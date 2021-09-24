@@ -1,3 +1,5 @@
+--Use EXCEPT to remove items which sold to Alabama and Georgia in 2014
+
 SELECT DISTINCT StockItemName FROM WideWorldImporters.Warehouse.StockItems s
 INNER JOIN WideWorldImporters.Sales.OrderLines ol
 ON s.StockItemID = ol.StockItemID

@@ -1,4 +1,7 @@
+-- Create function and apply it to the OrderID column
+
 USE WideWorldImporters;
+GO
 
 CREATE FUNCTION totalOrder (@orderIDpara INT)
 RETURNS INT AS BEGIN

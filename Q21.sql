@@ -1,8 +1,11 @@
 USE WideWorldImporters;
+GO
 
+-- Create a new schema called ods
 CREATE SCHEMA ods;
 GO
 
+-- Create table
 CREATE TABLE ods.Orders(
 OrderID int NOT NULL, 
 OrderDate date NOT NULL, 
@@ -10,8 +13,9 @@ OrderTotal int NOT NULL,
 CustomerID int NOT NULL
 );
 
-DROP PROCEDURE dbo.CalculateOrderTotal;
+--DROP PROCEDURE dbo.CalculateOrderTotal;
 
+-- Create Stored Procedure to insert data
 CREATE PROCEDURE dbo.CalculateOrderTotal
 (@OrderDate AS date)
 AS BEGIN
